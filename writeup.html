@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Write Up — Portfolio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+<style>
+:root{
+  --bg:#09090f;--bg2:#0f1019;--bg3:#141520;--surf:#1a1c2e;--surf2:#1f2236;
+  --brd:#272a45;--brd2:#353858;--acc:#7b8fff;--acc2:#b79dfa;--acc3:#3de8a0;
+  --txt:#eceef8;--txt2:#8f95bb;--txt3:#52577a;--danger:#f87171;--warn:#fbbf24;
+  --r:14px;--rs:8px;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--txt);min-height:100vh;overflow-x:hidden;}
+a{color:inherit;text-decoration:none;}
+::-webkit-scrollbar{width:5px;}
+::-webkit-scrollbar-track{background:var(--bg);}
+::-webkit-scrollbar-thumb{background:var(--brd);border-radius:3px;}
+body::before{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");pointer-events:none;z-index:9999;opacity:.4;}
+
+/* NAV */
+#nav{position:fixed;top:0;left:0;right:0;z-index:1000;height:68px;display:flex;align-items:center;justify-content:space-between;padding:0 2.5rem;background:rgba(9,9,15,.85);backdrop-filter:blur(20px);border-bottom:1px solid rgba(39,42,69,.6);transition:box-shadow .3s;}
+#nav.scrolled{box-shadow:0 2px 40px rgba(0,0,0,.6);}
+.nav-logo{font-family:'Syne',sans-serif;font-weight:800;font-size:1.15rem;display:flex;align-items:center;gap:10px;letter-spacing:-.5px;}
+.nav-logo .dot{width:8px;height:8px;background:var(--acc3);border-radius:50%;animation:dp 2.5s infinite;}
+@keyframes dp{0%,100%{opacity:1;transform:scale(1);}50%{opacity:.4;transform:scale(.7);}}
+.nav-logo em{color:var(--acc);font-style:normal;}
+.nav-links{display:flex;align-items:center;gap:2px;}
+.nav-links a{font-size:.82rem;font-weight:500;color:var(--txt2);padding:.48rem .82rem;border-radius:var(--rs);transition:color .2s,background .2s;}
+.nav-links a:hover,.nav-links a.active{color:var(--txt);background:var(--surf);}
+.hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:8px;border:none;background:transparent;}
+.hamburger span{width:20px;height:1.5px;background:var(--txt2);border-radius:2px;transition:.3s;}
+.hamburger.open span:nth-child(1){transform:rotate(45deg) translate(4px,5px);}
+.hamburger.open span:nth-child(2){opacity:0;}
+.hamburger.open span:nth-child(3){transform:rotate(-45deg) translate(4px,-5px);}
+
+/* PAGE HEADER */
+.wu-header{background:var(--bg2);border-bottom:1px solid var(--brd);padding:3rem 2rem 2.5rem;margin-top:68px;}
+.whi{max-width:1180px;margin:0 auto;}
+.breadcrumb{font-family:'JetBrains Mono',monospace;font-size:.72rem;color:var(--txt3);margin-bottom:1rem;display:flex;align-items:center;gap:8px;}
+.breadcrumb a{color:var(--acc);}
+.breadcrumb a:hover{text-decoration:underline;}
+.wh-title{font-family:'Syne',sans-serif;font-size:2.2rem;font-weight:800;letter-spacing:-.5px;margin-bottom:.4rem;}
+.wh-title span{color:var(--acc);}
+.wh-desc{font-size:.88rem;color:var(--txt2);}
+
+/* PLATFORM TABS */
+.p-tabs{display:flex;gap:.75rem;padding:1.25rem 2rem;max-width:1180px;margin:0 auto;border-bottom:1px solid var(--brd);overflow-x:auto;}
+.p-tab{display:flex;align-items:center;gap:9px;padding:.6rem 1.4rem;border-radius:var(--rs);font-family:'Syne',sans-serif;font-weight:700;font-size:.875rem;cursor:pointer;border:1px solid var(--brd);background:var(--surf);color:var(--txt2);transition:all .2s;white-space:nowrap;user-select:none;}
+.p-tab .tc{font-family:'JetBrains Mono',monospace;font-size:.65rem;background:var(--bg3);padding:2px 7px;border-radius:100px;}
+.p-tab.active[data-p="pico"]{background:rgba(123,143,255,.12);border-color:var(--acc);color:var(--acc);}
+.p-tab.active[data-p="thm"]{background:rgba(61,232,160,.12);border-color:var(--acc3);color:var(--acc3);}
+.p-tab.active[data-p="other"]{background:rgba(183,157,250,.12);border-color:var(--acc2);color:var(--acc2);}
+.p-tab:hover:not(.active){background:var(--surf2);color:var(--txt);}
+
+/* FILTERS */
+.wu-ctrl{max-width:1180px;margin:0 auto;padding:1.1rem 2rem;display:flex;gap:.8rem;align-items:center;flex-wrap:wrap;border-bottom:1px solid var(--brd);}
+.search-wrap{display:flex;align-items:center;gap:8px;background:var(--surf);border:1px solid var(--brd);border-radius:var(--rs);padding:.55rem 1rem;flex:1;min-width:200px;transition:border-color .2s;}
+.search-wrap:focus-within{border-color:var(--acc);}
+.search-wrap .si-ico{color:var(--txt3);font-size:.85rem;}
+.search-wrap input{background:transparent;border:none;outline:none;color:var(--txt);font-family:'DM Sans',sans-serif;font-size:.875rem;width:100%;}
+.search-wrap input::placeholder{color:var(--txt3);}
+.fsel{background:var(--surf);border:1px solid var(--brd);border-radius:var(--rs);padding:.55rem 2rem .55rem 1rem;color:var(--txt);font-family:'DM Sans',sans-serif;font-size:.875rem;outline:none;cursor:pointer;transition:border-color .2s;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%2352577a' d='M6 8L1 3h10z'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 10px center;}
+.fsel:focus{border-color:var(--acc);}
+.fsel option{background:var(--surf);}
+
+/* MAIN CONTENT */
+.wu-main{max-width:1180px;margin:0 auto;padding:1.5rem 2rem 5rem;}
+.wu-panel{display:none;}
+.wu-panel.active{display:block;}
+
+/* PLATFORM BANNER */
+.plat-banner{display:flex;align-items:center;gap:14px;padding:1rem 1.25rem;background:var(--surf);border:1px solid var(--brd);border-radius:var(--r);margin-bottom:1.75rem;}
+.plat-logo{width:48px;height:48px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.4rem;}
+.plat-logo.pico{background:rgba(123,143,255,.15);}
+.plat-logo.thm{background:rgba(61,232,160,.15);}
+.plat-logo.oth{background:rgba(183,157,250,.15);}
+.plat-meta h3{font-family:'Syne',sans-serif;font-weight:700;font-size:1rem;}
+.plat-meta p{font-size:.75rem;color:var(--txt2);font-family:'JetBrains Mono',monospace;}
+
+/* CATEGORY */
+.wu-cat{margin-bottom:2.5rem;}
+.wu-cat-title{font-family:'Syne',sans-serif;font-weight:700;font-size:.8rem;color:var(--txt2);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:1rem;display:flex;align-items:center;gap:10px;padding:.5rem 0;border-bottom:1px solid var(--brd);}
+.cat-count{font-family:'JetBrains Mono',monospace;font-size:.68rem;color:var(--txt3);font-weight:400;text-transform:none;letter-spacing:0;margin-left:auto;}
+
+/* CHALLENGE GRID */
+.ch-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:1rem;}
+.ch-card{background:var(--surf);border:1px solid var(--brd);border-radius:var(--r);padding:1.25rem;cursor:pointer;transition:all .2s;position:relative;overflow:hidden;}
+.ch-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--acc),var(--acc2));opacity:0;transition:opacity .2s;}
+.ch-card:hover{border-color:var(--acc);transform:translateY(-2px);box-shadow:0 8px 28px rgba(123,143,255,.1);}
+.ch-card:hover::before{opacity:1;}
+.ch-card.solved{border-color:rgba(61,232,160,.25);}
+.ch-card.solved::before{background:var(--acc3);opacity:1;}
+.ch-top{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:.75rem;}
+.ch-title{font-family:'Syne',sans-serif;font-weight:700;font-size:.95rem;flex:1;margin-right:8px;}
+.solved-badge{display:flex;align-items:center;gap:4px;font-family:'JetBrains Mono',monospace;font-size:.62rem;color:var(--acc3);background:rgba(61,232,160,.1);border:1px solid rgba(61,232,160,.2);padding:2px 8px;border-radius:100px;flex-shrink:0;}
+.ch-meta{display:flex;align-items:center;gap:.45rem;flex-wrap:wrap;margin-bottom:.7rem;}
+.diff{font-family:'JetBrains Mono',monospace;font-size:.62rem;padding:2px 8px;border-radius:100px;font-weight:500;}
+.d-easy{background:rgba(61,232,160,.1);color:var(--acc3);border:1px solid rgba(61,232,160,.2);}
+.d-medium{background:rgba(251,191,36,.1);color:var(--warn);border:1px solid rgba(251,191,36,.2);}
+.d-hard{background:rgba(248,113,113,.1);color:var(--danger);border:1px solid rgba(248,113,113,.2);}
+.d-insane{background:rgba(183,157,250,.1);color:var(--acc2);border:1px solid rgba(183,157,250,.2);}
+.ch-pts{font-family:'JetBrains Mono',monospace;font-size:.68rem;color:var(--txt3);}
+.ch-pts span{color:var(--acc);}
+.ch-desc{font-size:.8rem;color:var(--txt2);line-height:1.65;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
+.ch-foot{margin-top:.9rem;display:flex;justify-content:space-between;align-items:center;}
+.read-btn{font-family:'JetBrains Mono',monospace;font-size:.68rem;color:var(--acc);display:flex;align-items:center;gap:5px;}
+
+/* WRITEUP DETAIL */
+.wu-detail{display:none;background:var(--bg3);border:1px solid var(--brd);border-radius:var(--r);margin-top:.5rem;margin-bottom:1.5rem;overflow:hidden;animation:slideDown .25s ease;}
+@keyframes slideDown{from{opacity:0;transform:translateY(-10px);}to{opacity:1;transform:translateY(0);}}
+.wu-detail.open{display:block;}
+.wd-head{background:var(--surf);border-bottom:1px solid var(--brd);padding:1.25rem 1.5rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem;}
+.wd-title{font-family:'Syne',sans-serif;font-size:1.25rem;font-weight:800;}
+.wd-meta{display:flex;gap:.45rem;align-items:center;flex-wrap:wrap;margin-top:.35rem;}
+.wd-close{background:transparent;border:1px solid var(--brd);color:var(--txt2);border-radius:6px;padding:4px 14px;cursor:pointer;font-size:.78rem;font-family:'DM Sans',sans-serif;transition:all .2s;}
+.wd-close:hover{background:var(--danger);border-color:var(--danger);color:#fff;}
+.wd-body{padding:2rem;}
+
+/* STEPS */
+.wu-step{margin-bottom:1.75rem;}
+.step-num{display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px;background:var(--acc);color:#fff;border-radius:50%;font-family:'Syne',sans-serif;font-weight:800;font-size:.78rem;margin-bottom:.65rem;}
+.wu-step h4{font-family:'Syne',sans-serif;font-weight:700;font-size:.95rem;margin-bottom:.4rem;}
+.wu-step p{font-size:.875rem;color:var(--txt2);line-height:1.8;}
+.code-block{background:#060710;border:1px solid var(--brd);border-radius:var(--rs);padding:1.1rem 1.25rem;margin:.75rem 0;overflow-x:auto;}
+.code-block pre{font-family:'JetBrains Mono',monospace;font-size:.78rem;color:#a0aac8;line-height:1.75;white-space:pre;}
+.kw{color:var(--acc2);}
+.str{color:var(--acc3);}
+.cm{color:var(--txt3);}
+.flag-box{background:rgba(61,232,160,.07);border:1px solid rgba(61,232,160,.22);border-radius:var(--rs);padding:1rem 1.25rem;display:flex;align-items:center;gap:12px;margin-top:1.5rem;}
+.flag-icon{font-size:1.4rem;}
+.flag-lbl{font-size:.68rem;color:var(--acc3);font-family:'JetBrains Mono',monospace;text-transform:uppercase;letter-spacing:1px;display:block;margin-bottom:3px;}
+.flag-val{font-family:'JetBrains Mono',monospace;font-size:.88rem;color:var(--txt);word-break:break-all;}
+
+/* NO RESULTS */
+.no-res{text-align:center;padding:4rem 2rem;color:var(--txt3);}
+.no-res .ni{font-size:2.5rem;margin-bottom:1rem;}
+.no-res p{font-family:'JetBrains Mono',monospace;font-size:.82rem;}
+
+/* FOOTER */
+footer{background:var(--bg2);border-top:1px solid var(--brd);padding:2rem;}
+.fi{max-width:1180px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem;}
+.flogo{font-family:'Syne',sans-serif;font-weight:800;font-size:1rem;color:var(--txt2);}
+.flogo em{color:var(--acc);font-style:normal;}
+.fcopy{font-size:.78rem;color:var(--txt3);font-family:'JetBrains Mono',monospace;}
+.soc-link{width:36px;height:36px;display:flex;align-items:center;justify-content:center;background:var(--surf);border:1px solid var(--brd);border-radius:var(--rs);color:var(--txt2);font-size:.95rem;transition:all .2s;}
+.soc-link:hover{background:var(--acc);border-color:var(--acc);color:#fff;}
+.fsocs{display:flex;gap:.5rem;}
+
+@media(max-width:640px){
+  #nav{padding:0 1.25rem;}
+  .nav-links{display:none;position:fixed;top:68px;left:0;right:0;background:var(--bg2);border-bottom:1px solid var(--brd);flex-direction:column;padding:1rem;gap:.25rem;}
+  .nav-links.open{display:flex;}
+  .hamburger{display:flex;}
+  .wu-ctrl{padding:.85rem 1rem;flex-direction:column;}
+  .search-wrap{min-width:100%;}
+  .p-tabs{padding:.75rem 1rem;}
+  .wu-main{padding:1rem 1rem 4rem;}
+  .ch-grid{grid-template-columns:1fr;}
+  .wd-body{padding:1.25rem;}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="nav">
+  <a href="../index.html" class="nav-logo"><div class="dot"></div><em>sec</em>folio</a>
+  <div class="nav-links" id="navlinks">
+    <a href="../index.html#hero">Profil</a>
+    <a href="certificates.html">Sertifikat</a>
+    <a href="writeup.html" class="active">Write Up</a>
+    <a href="blog.html">Blog &amp; Info</a>
+    <a href="../index.html#projects">Proyek</a>
+    <a href="../index.html#contact">Kontak</a>
+  </div>
+  <button class="hamburger" id="ham"><span></span><span></span><span></span></button>
+</nav>
+
+<!-- HEADER -->
+<div class="wu-header">
+  <div class="whi">
+    <div class="breadcrumb"><a href="../index.html">Home</a><span>/</span>Write Up</div>
+    <h1 class="wh-title">CTF <span>Write Up</span></h1>
+    <p class="wh-desc">Dokumentasi solusi challenge dari berbagai platform CTF yang pernah saya ikuti.</p>
+  </div>
+</div>
+
+<!-- PLATFORM TABS -->
+<div class="p-tabs">
+  <div class="p-tab active" data-p="pico"><span>🏴</span> picoCTF <span class="tc" id="cnt-pico">0</span></div>
+  <div class="p-tab" data-p="thm"><span>🔐</span> TryHackMe <span class="tc" id="cnt-thm">0</span></div>
+  <div class="p-tab" data-p="other"><span>🌐</span> Platform Lain <span class="tc" id="cnt-other">0</span></div>
+</div>
+
+<!-- FILTERS -->
+<div class="wu-ctrl">
+  <div class="search-wrap">
+    <span class="si-ico"><i class="fa-solid fa-magnifying-glass"></i></span>
+    <input type="text" id="wsearch" placeholder="Cari judul challenge..."/>
+  </div>
+  <select class="fsel" id="fcat">
+    <option value="">Semua Kategori</option>
+    <option value="web">Web Exploitation</option>
+    <option value="crypto">Cryptography</option>
+    <option value="forensics">Forensics</option>
+    <option value="reverse">Reverse Engineering</option>
+    <option value="pwn">Binary Exploitation</option>
+    <option value="osint">OSINT</option>
+    <option value="misc">General Skills</option>
+  </select>
+  <select class="fsel" id="flvl">
+    <option value="">Semua Level</option>
+    <option value="easy">Easy</option>
+    <option value="medium">Medium</option>
+    <option value="hard">Hard</option>
+    <option value="insane">Insane</option>
+  </select>
+  <select class="fsel" id="fstat">
+    <option value="">Semua Status</option>
+    <option value="solved">✅ Solved</option>
+    <option value="unsolved">❌ Unsolved</option>
+  </select>
+</div>
+
+<!-- MAIN -->
+<div class="wu-main">
+
+  <!-- PICOCTF PANEL -->
+  <div class="wu-panel active" id="pan-pico">
+    <div class="plat-banner"><div class="plat-logo pico">🏴</div><div class="plat-meta"><h3>picoCTF</h3><p>// Carnegie Mellon University · Free CTF Platform</p></div></div>
+
+    <div class="wu-cat">
+      <div class="wu-cat-title"><span>⚙️</span> General Skills <span class="cat-count">2 challenges</span></div>
+      <div class="ch-grid">
+
+        <div class="ch-card solved" data-title="Obedient Cat" data-cat="misc" data-lvl="easy" data-solved="true" data-d="d-pico-cat">
+          <div class="ch-top"><div class="ch-title">Obedient Cat</div><div class="solved-badge">✓ Solved</div></div>
+          <div class="ch-meta"><span class="diff d-easy">Easy</span><span class="ch-pts">Poin: <span>5</span></span></div>
+          <div class="ch-desc">This file has a flag in plain sight (aka "in-the-clear"). Download flag.</div>
+          <div class="ch-foot"><span class="read-btn"><i class="fa-solid fa-book-open fa-xs"></i> Baca Write Up</span></div>
+        </div>
+        <div class="wu-detail" id="d-pico-cat">
+          <div class="wd-head">
+            <div><div class="wd-title">Obedient Cat</div><div class="wd-meta"><span class="diff d-easy">Easy</span><span class="ch-pts">Poin: <span>5</span></span><span class="solved-badge">✓ Solved</span></div></div>
+            <button class="wd-close">✕ Tutup</button>
+          </div>
+          <div class="wd-body">
+            <div class="wu-step"><div class="step-num">1</div><h4>Baca Deskripsi</h4><p>Challenge ini sangat simpel — file flag diberikan langsung. Download file <code>flag</code> yang disediakan di halaman challenge.</p></div>
+            <div class="wu-step"><div class="step-num">2</div><h4>Buka File dengan cat</h4><p>Gunakan command <code>cat</code> di terminal Linux untuk melihat isi file:</p><div class="code-block"><pre><span class="kw">$</span> cat flag
+<span class="str">picoCTF{s4n1ty_v3r1f13d_2fd6ed29}</span></pre></div></div>
+            <div class="flag-box"><div class="flag-icon">🚩</div><div><span class="flag-lbl">Flag</span><span class="flag-val">picoCTF{s4n1ty_v3r1f13d_2fd6ed29}</span></div></div>
+          </div>
+        </div>
+
+        <div class="ch-card solved" data-title="Python Wrangling" data-cat="misc" data-lvl="easy" data-solved="true" data-d="d-pico-py">
+          <div class="ch-top"><div class="ch-title">Python Wrangling</div><div class="solved-badge">✓ Solved</div></div>
+          <div class="ch-meta"><span class="diff d-easy">Easy</span><span class="ch-pts">Poin: <span>10</span></span></div>
+          <div class="ch-desc">Python scripts are invoked kind of like programs in the Terminal. Determine how they can be used to obtain the flag.</div>
+          <div class="ch-foot"><span class="read-btn"><i class="fa-solid fa-book-open fa-xs"></i> Baca Write Up</span></div>
+        </div>
+        <div class="wu-detail" id="d-pico-py">
+          <div class="wd-head">
+            <div><div class="wd-title">Python Wrangling</div><div class="wd-meta"><span class="diff d-easy">Easy</span><span class="ch-pts">Poin: <span>10</span></span><span class="solved-badge">✓ Solved</span></div></div>
+            <button class="wd-close">✕ Tutup</button>
+          </div>
+          <div class="wd-body">
+            <div class="wu-step"><div class="step-num">1</div><h4>Download File</h4><p>Download ketiga file yang disediakan: <code>ende.py</code>, <code>pw.txt</code>, dan <code>flag.txt.en</code>.</p></div>
+            <div class="wu-step"><div class="step-num">2</div><h4>Baca Password</h4><p>Lihat isi pw.txt:</p><div class="code-block"><pre><span class="kw">$</span> cat pw.txt
+<span class="str">dba8d560ea77d4a3f2a8c7bc46a2f9f0</span></pre></div></div>
+            <div class="wu-step"><div class="step-num">3</div><h4>Jalankan Script Decode</h4><p>Gunakan flag <code>-d</code> untuk mode decode:</p><div class="code-block"><pre><span class="kw">$</span> python3 ende.py <span class="str">-d</span> flag.txt.en
+<span class="cm">Please enter the password:</span> dba8d560ea77d4a3f2a8c7bc46a2f9f0
+<span class="str">picoCTF{4p0110_1n_7h3_h0us3_dbd1bea4}</span></pre></div></div>
+            <div class="flag-box"><div class="flag-icon">🚩</div><div><span class="flag-lbl">Flag</span><span class="flag-val">picoCTF{4p0110_1n_7h3_h0us3_dbd1bea4}</span></div></div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="wu-cat">
+      <div class="wu-cat-title"><span>🔒</span> Cryptography <span class="cat-count">1 challenge</span></div>
+      <div class="ch-grid">
+
+        <div class="ch-card solved" data-title="Caesar" data-cat="crypto" data-lvl="easy" data-solved="true" data-d="d-pico-caesar">
+          <div class="ch-top"><div class="ch-title">Caesar</div><div class="solved-badge">✓ Solved</div></div>
+          <div class="ch-meta"><span class="diff d-easy">Easy</span><span class="ch-pts">Poin: <span>25</span></span></div>
+          <div class="ch-desc">Decrypt this message. The flag is encrypted with a Caesar cipher. Ciphertext: <code>ynkooejcpdanqxeykjrbhqkrv</code></div>
+          <div class="ch-foot"><span class="read-btn"><i class="fa-solid fa-book-open fa-xs"></i> Baca Write Up</span></div>
+        </div>
+        <div class="wu-detail" id="d-pico-caesar">
+          <div class="wd-head">
+            <div><div class="wd-title">Caesar</div><div class="wd-meta"><span class="diff d-easy">Easy</span><span class="ch-pts">Poin: <span>25</span></span><span class="solved-badge">✓ Solved</span></div></div>
+            <button class="wd-close">✕ Tutup</button>
+          </div>
+          <div class="wd-body">
+            <div class="wu-step"><div class="step-num">1</div><h4>Identifikasi Cipher</h4><p>Dari nama challenge sudah jelas ini Caesar cipher. Ciphertext: <code>ynkooejcpdanqxeykjrbhqkrv</code></p></div>
+            <div class="wu-step"><div class="step-num">2</div><h4>Bruteforce Semua Shift</h4><div class="code-block"><pre><span class="kw">cipher</span> = <span class="str">"ynkooejcpdanqxeykjrbhqkrv"</span>
+<span class="kw">for</span> shift <span class="kw">in</span> range(26):
+    plain = <span class="str">""</span>.join(
+        chr((ord(c) - ord(<span class="str">'a'</span>) - shift) % 26 + ord(<span class="str">'a'</span>))
+        <span class="kw">for</span> c <span class="kw">in</span> cipher
+    )
+    print(f<span class="str">"Shift {shift:2d}: {plain}"</span>)
+
+<span class="cm"># Output shift 4:
+# crossingtherubicondjneoach</span></pre></div></div>
+            <div class="wu-step"><div class="step-num">3</div><h4>Wrap Sebagai Flag</h4><p>Shift 4 menghasilkan kata bermakna. Wrap dengan format picoCTF{}.</p></div>
+            <div class="flag-box"><div class="flag-icon">🚩</div><div><span class="flag-lbl">Flag</span><span class="flag-val">picoCTF{crossingtherubicondjneoach}</span></div></div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- TRYHACKME PANEL -->
+  <div class="wu-panel" id="pan-thm">
+    <div class="plat-banner"><div class="plat-logo thm">🔐</div><div class="plat-meta"><h3>TryHackMe</h3><p>// Learn Cybersecurity through Hands-on Labs</p></div></div>
+    <div class="wu-cat">
+      <div class="wu-cat-title"><span>🌐</span> Web Hacking <span class="cat-count">1 challenge</span></div>
+      <div class="ch-grid">
+
+        <div class="ch-card solved" data-title="OWASP Top 10" data-cat="web" data-lvl="easy" data-solved="true" data-d="d-thm-owasp">
+          <div class="ch-top"><div class="ch-title">OWASP Top 10 — 2021</div><div class="solved-badge">✓ Solved</div></div>
+          <div class="ch-meta"><span class="diff d-easy">Easy</span><span class="ch-pts">Room · <span>THM</span></span></div>
+          <div class="ch-desc">Learn about and exploit each of the OWASP Top 10 vulnerabilities — the 10 most critical web security risks.</div>
+          <div class="ch-foot"><span class="read-btn"><i class="fa-solid fa-book-open fa-xs"></i> Baca Write Up</span></div>
+        </div>
+        <div class="wu-detail" id="d-thm-owasp">
+          <div class="wd-head">
+            <div><div class="wd-title">OWASP Top 10 — 2021</div><div class="wd-meta"><span class="diff d-easy">Easy</span><span class="solved-badge">✓ Solved</span></div></div>
+            <button class="wd-close">✕ Tutup</button>
+          </div>
+          <div class="wd-body">
+            <div class="wu-step"><div class="step-num">1</div><h4>Broken Access Control</h4><p>Vulnerability pertama — server tidak memvalidasi permission dengan benar, sehingga file sensitif bisa diakses siapa saja.</p><div class="code-block"><pre><span class="cm"># Contoh: path traversal untuk akses file sensitif</span>
+<span class="kw">$</span> curl http://target.thm/etc/passwd
+<span class="str">root:x:0:0:root:/root:/bin/bash</span></pre></div></div>
+            <div class="wu-step"><div class="step-num">2</div><h4>Cryptographic Failures</h4><p>Ditemukan database SQLite yang dapat diakses publik dan berisi hash password yang tidak dienkripsi dengan baik.</p></div>
+            <div class="flag-box"><div class="flag-icon">🚩</div><div><span class="flag-lbl">Flag Task Utama</span><span class="flag-val">THM{OWASP_Top10_Completed}</span></div></div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- OTHER PLATFORMS PANEL -->
+  <div class="wu-panel" id="pan-other">
+    <div class="plat-banner"><div class="plat-logo oth">🌐</div><div class="plat-meta"><h3>Platform Lainnya</h3><p>// HackTheBox, CTFtime, COMPFEST, dan lainnya</p></div></div>
+    <div class="wu-cat">
+      <div class="wu-cat-title"><span>📦</span> HackTheBox <span class="cat-count">1 challenge</span></div>
+      <div class="ch-grid">
+
+        <div class="ch-card" data-title="Emdee five for life" data-cat="web" data-lvl="easy" data-solved="false" data-d="d-htb-emdee">
+          <div class="ch-top"><div class="ch-title">Emdee five for life</div></div>
+          <div class="ch-meta"><span class="diff d-easy">Easy</span><span class="ch-pts">HTB · <span>Web</span></span></div>
+          <div class="ch-desc">Can you encrypt fast enough? MD5 hash harus di-submit sebelum form timeout — tidak mungkin manual.</div>
+          <div class="ch-foot"><span class="read-btn"><i class="fa-solid fa-book-open fa-xs"></i> Baca Write Up</span></div>
+        </div>
+        <div class="wu-detail" id="d-htb-emdee">
+          <div class="wd-head">
+            <div><div class="wd-title">Emdee five for life</div><div class="wd-meta"><span class="diff d-easy">Easy</span><span class="ch-pts">HTB · <span>Web</span></span></div></div>
+            <button class="wd-close">✕ Tutup</button>
+          </div>
+          <div class="wd-body">
+            <div class="wu-step"><div class="step-num">1</div><h4>Analisis Website</h4><p>Website menampilkan string random dan meminta kita submit MD5 hash-nya. Form expire dalam hitungan milidetik — tidak bisa dilakukan manual.</p></div>
+            <div class="wu-step"><div class="step-num">2</div><h4>Automasi dengan Python requests</h4><div class="code-block"><pre><span class="kw">import</span> requests, hashlib
+<span class="kw">from</span> bs4 <span class="kw">import</span> BeautifulSoup
+
+s = requests.Session()
+r = s.get(<span class="str">"http://TARGET/"</span>)
+soup = BeautifulSoup(r.text, <span class="str">'html.parser'</span>)
+string = soup.find(<span class="str">'h3'</span>).text.strip()
+md5 = hashlib.md5(string.encode()).hexdigest()
+r2 = s.post(<span class="str">"http://TARGET/"</span>, data={<span class="str">'hash'</span>: md5})
+print(r2.text)</pre></div></div>
+            <div class="flag-box"><div class="flag-icon">🚩</div><div><span class="flag-lbl">Flag</span><span class="flag-val">HTB{N1c3_ScrIpt1nG_sk1lLs!}</span></div></div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<footer>
+  <div class="fi">
+    <div class="flogo"><em>sec</em>folio</div>
+    <div class="fcopy">// made with ❤️ &amp; lots of coffee · 2024</div>
+    <div class="fsocs">
+      <a href="https://github.com/USERNAME" target="_blank" class="soc-link"><i class="fa-brands fa-github"></i></a>
+      <a href="https://linkedin.com/in/USERNAME" target="_blank" class="soc-link"><i class="fa-brands fa-linkedin-in"></i></a>
+    </div>
+  </div>
+</footer>
+
+<script>
+function updateCounts(){
+  ['pico','thm','other'].forEach(p=>{
+    const panel=document.getElementById(`pan-${p}`);
+    const n=panel?panel.querySelectorAll('.ch-card').length:0;
+    const el=document.getElementById(`cnt-${p}`);
+    if(el)el.textContent=n;
+  });
+}
+updateCounts();
+
+document.querySelectorAll('.p-tab').forEach(tab=>{
+  tab.addEventListener('click',()=>{
+    document.querySelectorAll('.p-tab').forEach(t=>t.classList.remove('active'));
+    document.querySelectorAll('.wu-panel').forEach(p=>p.classList.remove('active'));
+    tab.classList.add('active');
+    document.getElementById(`pan-${tab.dataset.p}`).classList.add('active');
+    runFilter();
+  });
+});
+
+function runFilter(){
+  const sv=(document.getElementById('wsearch')?.value||'').toLowerCase();
+  const cv=document.getElementById('fcat')?.value||'';
+  const lv=document.getElementById('flvl')?.value||'';
+  const stv=document.getElementById('fstat')?.value||'';
+  const panel=document.querySelector('.wu-panel.active');
+  if(!panel)return;
+  let vis=0;
+  panel.querySelectorAll('.ch-card').forEach(c=>{
+    const ok=(!sv||(c.dataset.title||'').toLowerCase().includes(sv))&&(!cv||c.dataset.cat===cv)&&(!lv||c.dataset.lvl===lv)&&(!stv||(stv==='solved'?c.dataset.solved==='true':c.dataset.solved!=='true'));
+    c.style.display=ok?'':'none';
+    if(ok)vis++;
+  });
+  panel.querySelectorAll('.wu-cat').forEach(cat=>{
+    const has=[...cat.querySelectorAll('.ch-card')].some(c=>c.style.display!=='none');
+    cat.style.display=has?'':'none';
+  });
+  let nr=panel.querySelector('.no-res');
+  if(vis===0){
+    if(!nr){nr=document.createElement('div');nr.className='no-res';nr.innerHTML='<div class="ni">🔍</div><p>Tidak ada challenge yang cocok.</p>';panel.appendChild(nr);}
+    nr.style.display='';
+  }else if(nr){nr.style.display='none';}
+}
+['wsearch','fcat','flvl','fstat'].forEach(id=>{
+  const el=document.getElementById(id);
+  if(el)el.addEventListener(el.tagName==='INPUT'?'input':'change',runFilter);
+});
+
+document.addEventListener('click',e=>{
+  if(e.target.closest('.wd-close')){e.target.closest('.wu-detail').classList.remove('open');return;}
+  const card=e.target.closest('.ch-card');
+  if(!card)return;
+  const did=card.dataset.d;
+  if(!did)return;
+  document.querySelectorAll('.wu-detail.open').forEach(d=>{if(d.id!==did)d.classList.remove('open');});
+  const det=document.getElementById(did);
+  if(det){det.classList.toggle('open');if(det.classList.contains('open'))setTimeout(()=>det.scrollIntoView({behavior:'smooth',block:'nearest'}),100);}
+});
+
+const nav=document.getElementById('nav');
+window.addEventListener('scroll',()=>nav.classList.toggle('scrolled',window.scrollY>20),{passive:true});
+const ham=document.getElementById('ham'),nl=document.getElementById('navlinks');
+if(ham)ham.addEventListener('click',()=>{ham.classList.toggle('open');nl.classList.toggle('open');});
+</script>
+</body>
+</html>

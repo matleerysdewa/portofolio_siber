@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Blog & Info — Portfolio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&family=JetBrains+Mono:wght@400;500&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+<style>
+:root{
+  --bg:#09090f;--bg2:#0f1019;--bg3:#141520;--surf:#1a1c2e;--surf2:#1f2236;
+  --brd:#272a45;--brd2:#353858;--acc:#7b8fff;--acc2:#b79dfa;--acc3:#3de8a0;
+  --txt:#eceef8;--txt2:#8f95bb;--txt3:#52577a;--danger:#f87171;--warn:#fbbf24;
+  --r:14px;--rs:8px;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--txt);min-height:100vh;overflow-x:hidden;line-height:1.6;}
+a{color:inherit;text-decoration:none;}
+::-webkit-scrollbar{width:5px;}
+::-webkit-scrollbar-track{background:var(--bg);}
+::-webkit-scrollbar-thumb{background:var(--brd);border-radius:3px;}
+body::before{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");pointer-events:none;z-index:9999;opacity:.4;}
+
+/* NAV */
+#nav{position:fixed;top:0;left:0;right:0;z-index:1000;height:68px;display:flex;align-items:center;justify-content:space-between;padding:0 2.5rem;background:rgba(9,9,15,.88);backdrop-filter:blur(20px);border-bottom:1px solid rgba(39,42,69,.6);transition:box-shadow .3s;}
+#nav.scrolled{box-shadow:0 2px 40px rgba(0,0,0,.6);}
+.nav-logo{font-family:'Syne',sans-serif;font-weight:800;font-size:1.15rem;display:flex;align-items:center;gap:10px;letter-spacing:-.5px;}
+.nav-logo .dot{width:8px;height:8px;background:var(--acc3);border-radius:50%;animation:dp 2.5s infinite;}
+@keyframes dp{0%,100%{opacity:1;transform:scale(1);}50%{opacity:.4;transform:scale(.7);}}
+.nav-logo em{color:var(--acc);font-style:normal;}
+.nav-links{display:flex;align-items:center;gap:2px;}
+.nav-links a{font-size:.82rem;font-weight:500;color:var(--txt2);padding:.48rem .82rem;border-radius:var(--rs);transition:color .2s,background .2s;}
+.nav-links a:hover,.nav-links a.active{color:var(--txt);background:var(--surf);}
+.hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:8px;border:none;background:transparent;}
+.hamburger span{width:20px;height:1.5px;background:var(--txt2);border-radius:2px;transition:.3s;}
+.hamburger.open span:nth-child(1){transform:rotate(45deg) translate(4px,5px);}
+.hamburger.open span:nth-child(2){opacity:0;}
+.hamburger.open span:nth-child(3){transform:rotate(-45deg) translate(4px,-5px);}
+
+/* PAGE HEADER */
+.page-header{background:var(--bg2);border-bottom:1px solid var(--brd);padding:3rem 2rem 2.5rem;margin-top:68px;}
+.phi{max-width:1180px;margin:0 auto;}
+.breadcrumb{font-family:'JetBrains Mono',monospace;font-size:.72rem;color:var(--txt3);margin-bottom:1rem;display:flex;align-items:center;gap:8px;}
+.breadcrumb a{color:var(--acc);}
+.breadcrumb a:hover{text-decoration:underline;}
+.stag{font-family:'JetBrains Mono',monospace;font-size:.7rem;color:var(--acc);text-transform:uppercase;letter-spacing:2px;margin-bottom:.4rem;display:flex;align-items:center;gap:8px;}
+.stag::before{content:'';width:20px;height:1px;background:var(--acc);}
+.stitle{font-family:'Syne',sans-serif;font-size:2.2rem;font-weight:800;letter-spacing:-.5px;}
+.stitle span{color:var(--acc);}
+.sdesc{font-size:.88rem;color:var(--txt2);margin-top:.5rem;}
+
+/* SECTION TABS */
+.sec-tabs{display:flex;gap:.6rem;padding:1.25rem 2rem;max-width:1180px;margin:0 auto;border-bottom:1px solid var(--brd);}
+.sec-tab{display:flex;align-items:center;gap:8px;padding:.6rem 1.4rem;border-radius:var(--rs);font-family:'Syne',sans-serif;font-weight:700;font-size:.875rem;cursor:pointer;border:1px solid var(--brd);background:var(--surf);color:var(--txt2);transition:all .2s;user-select:none;}
+.sec-tab .tc{font-family:'JetBrains Mono',monospace;font-size:.65rem;background:var(--bg3);padding:2px 7px;border-radius:100px;}
+.sec-tab.active[data-s="blog"]{background:rgba(123,143,255,.12);border-color:var(--acc);color:var(--acc);}
+.sec-tab.active[data-s="info"]{background:rgba(61,232,160,.12);border-color:var(--acc3);color:var(--acc3);}
+.sec-tab:hover:not(.active){background:var(--surf2);color:var(--txt);}
+
+/* SEARCH / FILTER ROW */
+.ctrl-row{max-width:1180px;margin:0 auto;padding:1.1rem 2rem;display:flex;gap:.8rem;align-items:center;flex-wrap:wrap;border-bottom:1px solid var(--brd);}
+.search-wrap{display:flex;align-items:center;gap:8px;background:var(--surf);border:1px solid var(--brd);border-radius:var(--rs);padding:.55rem 1rem;flex:1;min-width:200px;transition:border-color .2s;}
+.search-wrap:focus-within{border-color:var(--acc);}
+.search-wrap .si{color:var(--txt3);font-size:.85rem;}
+.search-wrap input{background:transparent;border:none;outline:none;color:var(--txt);font-family:'DM Sans',sans-serif;font-size:.875rem;width:100%;}
+.search-wrap input::placeholder{color:var(--txt3);}
+.fsel{background:var(--surf);border:1px solid var(--brd);border-radius:var(--rs);padding:.55rem 2rem .55rem 1rem;color:var(--txt);font-family:'DM Sans',sans-serif;font-size:.875rem;outline:none;cursor:pointer;transition:border-color .2s;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%2352577a' d='M6 8L1 3h10z'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 10px center;}
+.fsel:focus{border-color:var(--acc);}
+.fsel option{background:var(--surf);}
+
+/* MAIN LAYOUT */
+.main-wrap{max-width:1180px;margin:0 auto;padding:2rem 2rem 5rem;}
+.sec-panel{display:none;}
+.sec-panel.active{display:block;}
+
+/* BLOG SECTION */
+.blog-grid{display:grid;gap:1.5rem;}
+.blog-card{background:var(--surf);border:1px solid var(--brd);border-radius:var(--r);overflow:hidden;transition:border-color .2s,box-shadow .2s;}
+.blog-card:hover{border-color:var(--acc);box-shadow:0 8px 32px rgba(123,143,255,.08);}
+.blog-card.open{border-color:var(--acc);}
+.blog-preview{display:flex;align-items:flex-start;gap:1.5rem;padding:1.5rem;cursor:pointer;}
+.blog-cover{width:140px;height:90px;border-radius:10px;object-fit:cover;flex-shrink:0;background:linear-gradient(135deg,var(--surf2),var(--bg3));display:flex;align-items:center;justify-content:center;font-size:2.5rem;overflow:hidden;}
+.blog-cover img{width:100%;height:100%;object-fit:cover;}
+.blog-preview-body{flex:1;min-width:0;}
+.blog-meta-row{display:flex;align-items:center;gap:.5rem;flex-wrap:wrap;margin-bottom:.5rem;}
+.blog-cat{font-family:'JetBrains Mono',monospace;font-size:.65rem;padding:2px 9px;border-radius:100px;background:rgba(123,143,255,.1);color:var(--acc);border:1px solid rgba(123,143,255,.18);}
+.blog-cat.sec{background:rgba(248,113,113,.1);color:var(--danger);border-color:rgba(248,113,113,.18);}
+.blog-cat.tools{background:rgba(61,232,160,.1);color:var(--acc3);border-color:rgba(61,232,160,.18);}
+.blog-cat.ctf{background:rgba(183,157,250,.1);color:var(--acc2);border-color:rgba(183,157,250,.18);}
+.blog-date{font-family:'JetBrains Mono',monospace;font-size:.65rem;color:var(--txt3);}
+.blog-read-time{font-family:'JetBrains Mono',monospace;font-size:.65rem;color:var(--txt3);}
+.blog-title{font-family:'Syne',sans-serif;font-weight:800;font-size:1.1rem;margin-bottom:.4rem;line-height:1.3;}
+.blog-excerpt{font-size:.875rem;color:var(--txt2);line-height:1.7;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
+.blog-preview-foot{display:flex;align-items:center;justify-content:space-between;margin-top:.75rem;}
+.blog-expand-btn{display:flex;align-items:center;gap:6px;font-family:'JetBrains Mono',monospace;font-size:.68rem;color:var(--acc);transition:gap .2s;}
+.blog-card.open .blog-expand-btn .chevron{transform:rotate(180deg);}
+.chevron{transition:transform .3s;}
+.blog-tags{display:flex;gap:.3rem;flex-wrap:wrap;}
+.btag{font-family:'JetBrains Mono',monospace;font-size:.62rem;color:var(--txt3);padding:1px 7px;border-radius:100px;border:1px solid var(--brd);}
+
+/* BLOG FULL CONTENT */
+.blog-full{display:none;border-top:1px solid var(--brd);padding:2rem 1.5rem 1.5rem;font-family:'Lora',Georgia,serif;font-size:.975rem;line-height:1.9;color:var(--txt2);}
+.blog-card.open .blog-full{display:block;}
+.blog-full h2{font-family:'Syne',sans-serif;font-weight:800;font-size:1.3rem;color:var(--txt);margin:1.75rem 0 .6rem;}
+.blog-full h3{font-family:'Syne',sans-serif;font-weight:700;font-size:1.05rem;color:var(--txt);margin:1.4rem 0 .5rem;}
+.blog-full p{margin-bottom:1rem;}
+.blog-full ul,.blog-full ol{padding-left:1.5rem;margin-bottom:1rem;}
+.blog-full li{margin-bottom:.35rem;}
+.blog-full code{font-family:'JetBrains Mono',monospace;font-size:.82rem;background:rgba(123,143,255,.1);color:var(--acc);padding:1px 6px;border-radius:4px;}
+.blog-full pre{background:#060710;border:1px solid var(--brd);border-radius:var(--rs);padding:1.1rem 1.25rem;margin:1rem 0;overflow-x:auto;}
+.blog-full pre code{background:transparent;color:#a0aac8;font-size:.78rem;padding:0;}
+.blog-full blockquote{border-left:3px solid var(--acc);padding:.5rem 1rem;margin:1rem 0;color:var(--txt2);font-style:italic;background:rgba(123,143,255,.05);border-radius:0 var(--rs) var(--rs) 0;}
+.blog-full img{width:100%;border-radius:var(--rs);margin:1rem 0;border:1px solid var(--brd);}
+.blog-full strong{color:var(--txt);font-weight:600;}
+.blog-full .highlight{background:rgba(61,232,160,.08);border:1px solid rgba(61,232,160,.2);border-radius:var(--rs);padding:1rem;margin:1rem 0;font-family:'DM Sans',sans-serif;font-size:.875rem;color:var(--acc3);}
+.blog-full-footer{margin-top:1.5rem;padding-top:1rem;border-top:1px solid var(--brd);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.75rem;}
+.blog-author{display:flex;align-items:center;gap:8px;font-family:'DM Sans',sans-serif;font-size:.82rem;color:var(--txt2);}
+.blog-author .av{width:32px;height:32px;border-radius:50%;background:var(--surf2);border:1px solid var(--brd);display:flex;align-items:center;justify-content:center;font-size:.9rem;}
+.blog-share{display:flex;gap:.5rem;}
+.share-btn{display:flex;align-items:center;gap:5px;font-family:'JetBrains Mono',monospace;font-size:.65rem;color:var(--txt2);padding:4px 10px;border:1px solid var(--brd);border-radius:var(--rs);transition:all .2s;cursor:pointer;background:transparent;}
+.share-btn:hover{border-color:var(--acc);color:var(--acc);}
+
+/* INFO / EVENT SECTION */
+.info-layout{display:grid;grid-template-columns:1fr 1fr;gap:1.25rem;}
+.info-card{background:var(--surf);border:1px solid var(--brd);border-radius:var(--r);padding:1.25rem;transition:border-color .2s,transform .2s;position:relative;overflow:hidden;}
+.info-card:hover{transform:translateY(-2px);}
+.info-card.upcoming{border-color:rgba(123,143,255,.35);}
+.info-card.upcoming:hover{border-color:var(--acc);box-shadow:0 8px 28px rgba(123,143,255,.1);}
+.info-card.open-reg{border-color:rgba(61,232,160,.35);}
+.info-card.open-reg:hover{border-color:var(--acc3);box-shadow:0 8px 28px rgba(61,232,160,.08);}
+.info-card.closed{opacity:.6;}
+.info-card.closed:hover{transform:none;}
+.info-card-stripe{position:absolute;top:0;left:0;right:0;height:3px;}
+.info-card.upcoming .info-card-stripe{background:var(--acc);}
+.info-card.open-reg .info-card-stripe{background:var(--acc3);}
+.info-card.closed .info-card-stripe{background:var(--txt3);}
+.info-top{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:.85rem;gap:.75rem;}
+.info-badge{font-family:'JetBrains Mono',monospace;font-size:.62rem;padding:3px 10px;border-radius:100px;font-weight:500;white-space:nowrap;flex-shrink:0;}
+.ib-upcoming{background:rgba(123,143,255,.12);color:var(--acc);border:1px solid rgba(123,143,255,.25);}
+.ib-open{background:rgba(61,232,160,.1);color:var(--acc3);border:1px solid rgba(61,232,160,.22);}
+.ib-closed{background:rgba(82,87,122,.15);color:var(--txt3);border:1px solid rgba(82,87,122,.25);}
+.ib-live{background:rgba(248,113,113,.12);color:var(--danger);border:1px solid rgba(248,113,113,.25);animation:live-pulse 2s infinite;}
+@keyframes live-pulse{0%,100%{opacity:1;}50%{opacity:.6;}}
+.info-type{font-family:'JetBrains Mono',monospace;font-size:.65rem;color:var(--txt3);text-transform:uppercase;letter-spacing:1px;margin-bottom:.35rem;}
+.info-title{font-family:'Syne',sans-serif;font-weight:800;font-size:1rem;margin-bottom:.5rem;line-height:1.3;}
+.info-desc{font-size:.82rem;color:var(--txt2);line-height:1.65;margin-bottom:1rem;}
+.info-details{display:flex;flex-direction:column;gap:.35rem;margin-bottom:1rem;}
+.info-row{display:flex;align-items:center;gap:8px;font-size:.8rem;color:var(--txt2);}
+.info-row .ir-icon{font-size:.8rem;color:var(--txt3);width:16px;text-align:center;flex-shrink:0;}
+.info-row strong{color:var(--txt);font-weight:500;}
+.info-foot{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.5rem;margin-top:.75rem;padding-top:.75rem;border-top:1px solid var(--brd);}
+.info-platform{font-family:'JetBrains Mono',monospace;font-size:.65rem;color:var(--txt3);}
+.info-link{display:flex;align-items:center;gap:5px;font-family:'JetBrains Mono',monospace;font-size:.68rem;color:var(--acc);transition:gap .2s;}
+.info-link:hover{gap:8px;}
+.info-filter-tabs{display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:1.5rem;}
+.ift{font-family:'JetBrains Mono',monospace;font-size:.68rem;padding:4px 12px;border-radius:100px;border:1px solid var(--brd);color:var(--txt2);cursor:pointer;transition:all .2s;background:transparent;}
+.ift.active,.ift:hover{border-color:var(--acc);color:var(--acc);background:rgba(123,143,255,.08);}
+
+/* EMPTY STATE */
+.empty-state{text-align:center;padding:4rem 2rem;color:var(--txt3);}
+.empty-state .ei{font-size:2.5rem;margin-bottom:1rem;}
+.empty-state p{font-family:'JetBrains Mono',monospace;font-size:.82rem;}
+
+/* FOOTER */
+footer{background:var(--bg2);border-top:1px solid var(--brd);padding:2rem;}
+.fi{max-width:1180px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem;}
+.flogo{font-family:'Syne',sans-serif;font-weight:800;font-size:1rem;color:var(--txt2);}
+.flogo em{color:var(--acc);font-style:normal;}
+.fcopy{font-size:.78rem;color:var(--txt3);font-family:'JetBrains Mono',monospace;}
+.soc-link{width:36px;height:36px;display:flex;align-items:center;justify-content:center;background:var(--surf);border:1px solid var(--brd);border-radius:var(--rs);color:var(--txt2);font-size:.95rem;transition:all .2s;}
+.soc-link:hover{background:var(--acc);border-color:var(--acc);color:#fff;}
+.fsocs{display:flex;gap:.5rem;}
+.fu{opacity:0;transform:translateY(24px);transition:opacity .6s ease,transform .6s ease;}
+.fu.vis{opacity:1;transform:translateY(0);}
+
+@media(max-width:900px){.info-layout{grid-template-columns:1fr;}}
+@media(max-width:640px){
+  #nav{padding:0 1.25rem;}
+  .nav-links{display:none;position:fixed;top:68px;left:0;right:0;background:var(--bg2);border-bottom:1px solid var(--brd);flex-direction:column;padding:1rem;gap:.25rem;}
+  .nav-links.open{display:flex;}
+  .hamburger{display:flex;}
+  .ctrl-row{padding:.85rem 1rem;flex-direction:column;}
+  .search-wrap{min-width:100%;}
+  .sec-tabs{padding:.75rem 1rem;overflow-x:auto;}
+  .main-wrap{padding:1.25rem 1rem 4rem;}
+  .blog-preview{flex-direction:column;gap:.75rem;}
+  .blog-cover{width:100%;height:160px;}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="nav">
+  <a href="../index.html" class="nav-logo"><div class="dot"></div><em>sec</em>folio</a>
+  <div class="nav-links" id="navlinks">
+    <a href="../index.html#hero">Profil</a>
+    <a href="certificates.html">Sertifikat</a>
+    <a href="writeup.html">Write Up</a>
+    <a href="blog.html" class="active">Blog &amp; Info</a>
+    <a href="../index.html#projects">Proyek</a>
+    <a href="../index.html#contact">Kontak</a>
+  </div>
+  <button class="hamburger" id="ham"><span></span><span></span><span></span></button>
+</nav>
+
+<!-- HEADER -->
+<div class="page-header">
+  <div class="phi">
+    <div class="breadcrumb"><a href="../index.html">Home</a><span>/</span>Blog &amp; Info</div>
+    <div class="stag">Tulisan &amp; Berita</div>
+    <h1 class="stitle">Blog &amp; <span>Info</span></h1>
+    <p class="sdesc">Tulisan seputar cybersecurity dan info lomba / event terkini.</p>
+  </div>
+</div>
+
+<!-- SECTION TABS -->
+<div class="sec-tabs">
+  <div class="sec-tab active" data-s="blog"><span>✍️</span> Blog <span class="tc" id="cnt-blog">0</span></div>
+  <div class="sec-tab" data-s="info"><span>📢</span> Info &amp; Event <span class="tc" id="cnt-info">0</span></div>
+</div>
+
+<!-- FILTER ROW -->
+<div class="ctrl-row">
+  <div class="search-wrap">
+    <span class="si"><i class="fa-solid fa-magnifying-glass"></i></span>
+    <input type="text" id="main-search" placeholder="Cari tulisan atau event..."/>
+  </div>
+  <select class="fsel" id="cat-filter">
+    <option value="">Semua Kategori</option>
+    <option value="security">Security</option>
+    <option value="ctf">CTF</option>
+    <option value="tools">Tools</option>
+    <option value="tips">Tips & Tricks</option>
+    <option value="competition">Kompetisi</option>
+    <option value="webinar">Webinar</option>
+    <option value="bootcamp">Bootcamp</option>
+  </select>
+  <select class="fsel" id="sort-filter">
+    <option value="newest">Terbaru</option>
+    <option value="oldest">Terlama</option>
+  </select>
+</div>
+
+<!-- MAIN CONTENT -->
+<div class="main-wrap">
+
+  <!-- BLOG PANEL -->
+  <div class="sec-panel active" id="panel-blog">
+    <div class="blog-grid" id="blog-list">
+
+      <!-- BLOG POST 1 -->
+      <div class="blog-card fu" data-cat="ctf" data-date="2024-03-15" data-title="Belajar SQL Injection dari Nol">
+        <div class="blog-preview">
+          <div class="blog-cover">💉</div>
+          <div class="blog-preview-body">
+            <div class="blog-meta-row">
+              <span class="blog-cat sec">Security</span>
+              <span class="blog-date"><i class="fa-regular fa-calendar fa-xs"></i> 15 Maret 2024</span>
+              <span class="blog-read-time"><i class="fa-regular fa-clock fa-xs"></i> 8 menit baca</span>
+            </div>
+            <div class="blog-title">Belajar SQL Injection dari Nol sampai Bisa Eksploitasi</div>
+            <div class="blog-excerpt">SQL Injection adalah salah satu kerentanan web paling umum dan berbahaya. Di artikel ini saya bahas dari dasar: apa itu SQLi, kenapa bisa terjadi, dan bagaimana cara mengeksploitasinya secara etis menggunakan lab sendiri...</div>
+            <div class="blog-preview-foot">
+              <div class="blog-tags"><span class="btag">sqli</span><span class="btag">web</span><span class="btag">beginner</span></div>
+              <div class="blog-expand-btn">Baca <i class="fa-solid fa-chevron-down fa-xs chevron"></i></div>
+            </div>
+          </div>
+        </div>
+        <div class="blog-full">
+          <h2>Apa itu SQL Injection?</h2>
+          <p>SQL Injection (SQLi) adalah teknik serangan yang memungkinkan attacker menyisipkan atau "meng-inject" kode SQL berbahaya ke dalam query database melalui input yang tidak tervalidasi. Akibatnya, attacker bisa membaca data sensitif, mengubah data, bahkan mengambil alih seluruh server.</p>
+          <blockquote>"SQL Injection masih menduduki posisi teratas OWASP Top 10 — artinya ini masih ancaman nyata sampai sekarang."</blockquote>
+          <h2>Kenapa SQLi Bisa Terjadi?</h2>
+          <p>Penyebab utamanya adalah developer yang langsung menggabungkan input user ke dalam query SQL tanpa sanitasi. Contoh kode PHP yang rentan:</p>
+          <pre><code>// RENTAN — jangan pernah lakukan ini!
+$username = $_POST['username'];
+$query = "SELECT * FROM users WHERE username = '$username'";</code></pre>
+          <p>Kalau user mengisi <code>' OR '1'='1</code>, query yang dieksekusi jadi:</p>
+          <pre><code>SELECT * FROM users WHERE username = '' OR '1'='1'</code></pre>
+          <p>Karena <code>'1'='1'</code> selalu TRUE, query ini mengembalikan <strong>semua user</strong> di database!</p>
+          <h2>Cara Eksploitasi (Lab Environment)</h2>
+          <p>Saya menggunakan DVWA (Damn Vulnerable Web Application) sebagai target latihan. Berikut langkah-langkahnya:</p>
+          <pre><code># 1. Cek apakah form rentan
+' -- -
+
+# 2. Cari jumlah kolom
+' ORDER BY 1-- -
+' ORDER BY 2-- -
+' ORDER BY 3-- -   &lt;-- error di sini = 2 kolom
+
+# 3. Dump data dengan UNION
+' UNION SELECT username, password FROM users-- -</code></pre>
+          <h3>Gunakan sqlmap untuk Automasi</h3>
+          <pre><code>sqlmap -u "http://target.com/page?id=1" --dbs --batch</code></pre>
+          <div class="highlight">⚡ Ingat: Selalu lakukan ini di lab sendiri atau dengan izin tertulis. SQL Injection tanpa izin adalah kejahatan.</div>
+          <h2>Cara Mencegah SQLi</h2>
+          <ul>
+            <li>Gunakan <strong>Prepared Statements</strong> / Parameterized Queries</li>
+            <li>Gunakan ORM (Eloquent, Hibernate, dll)</li>
+            <li>Validasi dan sanitasi input user</li>
+            <li>Batasi privilege user database</li>
+            <li>Terapkan Web Application Firewall (WAF)</li>
+          </ul>
+          <pre><code>// AMAN — pakai prepared statement
+$stmt = $pdo->prepare("SELECT * FROM users WHERE username = ?");
+$stmt->execute([$username]);</code></pre>
+          <div class="blog-full-footer">
+            <div class="blog-author"><div class="av">👤</div><span>Nama Kamu · 15 Maret 2024</span></div>
+            <div class="blog-share">
+              <button class="share-btn" onclick="copyLink()"><i class="fa-solid fa-link fa-xs"></i> Copy Link</button>
+              <a href="https://twitter.com/intent/tweet?text=Belajar SQL Injection dari Nol&url=" target="_blank" class="share-btn"><i class="fa-brands fa-x-twitter fa-xs"></i> Share</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- BLOG POST 2 -->
+      <div class="blog-card fu" data-cat="tools" data-date="2024-02-20" data-title="5 Tools Wajib Untuk Pemula Cybersecurity">
+        <div class="blog-preview">
+          <div class="blog-cover">🛠️</div>
+          <div class="blog-preview-body">
+            <div class="blog-meta-row">
+              <span class="blog-cat tools">Tools</span>
+              <span class="blog-date"><i class="fa-regular fa-calendar fa-xs"></i> 20 Februari 2024</span>
+              <span class="blog-read-time"><i class="fa-regular fa-clock fa-xs"></i> 5 menit baca</span>
+            </div>
+            <div class="blog-title">5 Tools Wajib untuk Pemula di Cybersecurity</div>
+            <div class="blog-excerpt">Bingung mulai dari mana? Berikut 5 tools yang wajib kamu kenal dan kuasai sebagai pemula di dunia cybersecurity — dari Nmap untuk reconnaissance sampai Burp Suite untuk web testing...</div>
+            <div class="blog-preview-foot">
+              <div class="blog-tags"><span class="btag">tools</span><span class="btag">beginner</span><span class="btag">nmap</span></div>
+              <div class="blog-expand-btn">Baca <i class="fa-solid fa-chevron-down fa-xs chevron"></i></div>
+            </div>
+          </div>
+        </div>
+        <div class="blog-full">
+          <h2>Kenapa Perlu Tahu Tools Dulu?</h2>
+          <p>Belajar cybersecurity tanpa mengenal tools ibarat memasak tanpa peralatan dapur. Tools ini bukan untuk "hack" seenaknya — tapi untuk memahami sistem, mencari kelemahan, dan belajar bertahan.</p>
+          <h2>1. Nmap — Network Scanner</h2>
+          <p>Nmap adalah tool paling fundamental untuk reconnaissance. Digunakan untuk men-scan jaringan, menemukan host aktif, dan mengidentifikasi service yang berjalan.</p>
+          <pre><code># Scan basic
+nmap 192.168.1.1
+
+# Scan dengan deteksi OS dan service version
+nmap -sV -O target.com
+
+# Scan semua port
+nmap -p- target.com</code></pre>
+          <h2>2. Burp Suite — Web Proxy</h2>
+          <p>Tool wajib untuk web application testing. Bisa intercept, modify, dan replay HTTP request. Versi Community gratis sudah cukup untuk belajar.</p>
+          <h2>3. Wireshark — Packet Analyzer</h2>
+          <p>Untuk menganalisis traffic jaringan secara real-time. Sangat berguna untuk forensics challenge di CTF dan memahami protokol jaringan.</p>
+          <h2>4. Metasploit Framework</h2>
+          <p>Framework exploitation yang powerful. Gunakan hanya di lab sendiri atau dengan izin! Berisi ribuan exploit yang sudah terdokumentasi.</p>
+          <h2>5. John the Ripper — Password Cracker</h2>
+          <p>Tool untuk crack password hash. Sering dibutuhkan di challenge CTF kategori crypto dan forensics.</p>
+          <pre><code># Crack hash dengan wordlist rockyou
+john --wordlist=/usr/share/wordlists/rockyou.txt hash.txt</code></pre>
+          <div class="highlight">💡 Semua tools di atas tersedia di Kali Linux — distro Linux yang dirancang khusus untuk penetration testing.</div>
+          <div class="blog-full-footer">
+            <div class="blog-author"><div class="av">👤</div><span>Nama Kamu · 20 Februari 2024</span></div>
+            <div class="blog-share">
+              <button class="share-btn" onclick="copyLink()"><i class="fa-solid fa-link fa-xs"></i> Copy Link</button>
+              <a href="https://twitter.com/intent/tweet?text=5+Tools+Wajib+Cybersecurity&url=" target="_blank" class="share-btn"><i class="fa-brands fa-x-twitter fa-xs"></i> Share</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- BLOG POST 3 -->
+      <div class="blog-card fu" data-cat="ctf" data-date="2024-01-10" data-title="Pengalaman Pertama Ikut picoCTF">
+        <div class="blog-preview">
+          <div class="blog-cover">🏴</div>
+          <div class="blog-preview-body">
+            <div class="blog-meta-row">
+              <span class="blog-cat ctf">CTF</span>
+              <span class="blog-date"><i class="fa-regular fa-calendar fa-xs"></i> 10 Januari 2024</span>
+              <span class="blog-read-time"><i class="fa-regular fa-clock fa-xs"></i> 4 menit baca</span>
+            </div>
+            <div class="blog-title">Pengalaman Pertama Ikut picoCTF — Seru tapi Bikin Pusing!</div>
+            <div class="blog-excerpt">picoCTF adalah kompetisi CTF yang diselenggarakan Carnegie Mellon University, cocok banget untuk pemula seperti saya. Ini cerita pengalaman pertama saya ikut CTF, apa yang berhasil, apa yang gagal, dan pelajaran yang saya dapat...</div>
+            <div class="blog-preview-foot">
+              <div class="blog-tags"><span class="btag">ctf</span><span class="btag">picoctf</span><span class="btag">pengalaman</span></div>
+              <div class="blog-expand-btn">Baca <i class="fa-solid fa-chevron-down fa-xs chevron"></i></div>
+            </div>
+          </div>
+        </div>
+        <div class="blog-full">
+          <h2>Awal Mula Kenal CTF</h2>
+          <p>Saya pertama kali dengar tentang CTF (Capture The Flag) dari teman sekelas yang sering ngomongin soal hacking. Katanya ini cara seru buat belajar cybersecurity sambil kompetisi. Langsung deh saya coba daftar picoCTF 2024.</p>
+          <h2>Persiapan Sebelum Kompetisi</h2>
+          <p>Jujur, waktu itu persiapan saya minim banget. Yang saya lakukan cuma:</p>
+          <ul>
+            <li>Install Kali Linux di VirtualBox</li>
+            <li>Baca-baca dasar tentang kategori challenge: web, crypto, forensics</li>
+            <li>Latihan di platform TryHackMe beberapa minggu sebelumnya</li>
+          </ul>
+          <h2>Challenge yang Berhasil Saya Selesaikan</h2>
+          <p>Dari total challenge yang ada, saya berhasil solve sekitar 40%. Yang paling berkesan adalah:</p>
+          <ul>
+            <li><strong>Obedient Cat</strong> — super mudah, tinggal <code>cat</code> file flagnya</li>
+            <li><strong>Python Wrangling</strong> — baru tau ada flag <code>-d</code> untuk decode</li>
+            <li><strong>Caesar</strong> — bikin script bruteforce sederhana</li>
+          </ul>
+          <h2>Yang Gagal dan Pelajarannya</h2>
+          <p>Banyak challenge yang saya stuck, terutama kategori binary exploitation (pwn). Ini memang butuh pemahaman assembly dan memory management yang belum saya punya.</p>
+          <blockquote>"Gagal di CTF bukan berarti kamu bodoh — itu artinya ada hal baru yang bisa dipelajari."</blockquote>
+          <div class="highlight">🎯 Tips: Mulai dari challenge yang poinnya kecil dulu. Biasanya itu yang paling mudah dan bisa boost semangat untuk terus solve yang lebih susah.</div>
+          <div class="blog-full-footer">
+            <div class="blog-author"><div class="av">👤</div><span>Nama Kamu · 10 Januari 2024</span></div>
+            <div class="blog-share">
+              <button class="share-btn" onclick="copyLink()"><i class="fa-solid fa-link fa-xs"></i> Copy Link</button>
+              <a href="https://twitter.com/intent/tweet?text=Pengalaman+Pertama+picoCTF&url=" target="_blank" class="share-btn"><i class="fa-brands fa-x-twitter fa-xs"></i> Share</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- INFO PANEL -->
+  <div class="sec-panel" id="panel-info">
+    <div class="info-filter-tabs" id="info-tabs">
+      <div class="ift active" data-it="">Semua</div>
+      <div class="ift" data-it="competition">🏆 Kompetisi</div>
+      <div class="ift" data-it="webinar">📡 Webinar</div>
+      <div class="ift" data-it="bootcamp">🎓 Bootcamp</div>
+    </div>
+    <div class="info-layout" id="info-list">
+
+      <div class="info-card open-reg fu" data-it="competition">
+        <div class="info-card-stripe"></div>
+        <div class="info-top">
+          <div><div class="info-type">🏆 Kompetisi CTF</div><div class="info-title">National Cyber League (NCL) — Spring Season</div></div>
+          <span class="info-badge ib-open">Daftar Sekarang</span>
+        </div>
+        <div class="info-desc">Kompetisi CTF individu dan tim dengan format gym (practice) dan season (ranked). Cocok untuk semua level dari pemula sampai advanced. Tersedia kategori: password cracking, log analysis, network traffic analysis, dan lainnya.</div>
+        <div class="info-details">
+          <div class="info-row"><span class="ir-icon"><i class="fa-regular fa-calendar"></i></span> <span><strong>Pendaftaran:</strong> s/d 15 April 2024</span></div>
+          <div class="info-row"><span class="ir-icon"><i class="fa-solid fa-trophy"></i></span> <span><strong>Hadiah:</strong> Sertifikat + Skor nasional</span></div>
+          <div class="info-row"><span class="ir-icon"><i class="fa-solid fa-globe"></i></span> <span><strong>Format:</strong> Online Individual / Tim</span></div>
+          <div class="info-row"><span class="ir-icon"><i class="fa-solid fa-tag"></i></span> <span><strong>Biaya:</strong> Gratis (dengan akun .edu)</span></div>
+        </div>
+        <div class="info-foot"><span class="info-platform">nationalcyberleague.org</span><a href="https://nationalcyberleague.org" target="_blank" class="info-link">Daftar <i class="fa-solid fa-arrow-right fa-xs"></i></a></div>
+      </div>
+
+      <div class="info-card upcoming fu" data-it="competition">
+        <div class="info-card-stripe"></div>
+        <div class="info-top">
+          <div><div class="info-type">🏆 Kompetisi CTF</div><div class="info-title">picoCTF 2025 — Carnegie Mellon</div></div>
+          <span class="info-badge ib-upcoming">Segera</span>
+        </div>
+        <div class="info-desc">Kompetisi CTF tahunan dari Carnegie Mellon University yang dirancang untuk pelajar dan mahasiswa. Ratusan challenge dengan berbagai tingkat kesulitan dari kategori web, forensics, crypto, pwn, dan reverse engineering.</div>
+        <div class="info-details">
+          <div class="info-row"><span class="ir-icon"><i class="fa-regular fa-calendar"></i></span> <span><strong>Pelaksanaan:</strong> Maret 2025</span></div>
+          <div class="info-row"><span class="ir-icon"><i class="fa-solid fa-trophy"></i></span> <span><strong>Hadiah:</strong> Sertifikat + Merchandise</span></div>
+          <div class="info-row"><span class="ir-icon"><i class="fa-solid fa-globe"></i></span> <span><strong>Format:</strong> Online Individual</span></div>
+          <div class="info-row"><span class="ir-icon"><i class="fa-solid fa-tag"></i></span> <span><strong>Biaya:</strong> Gratis</span></div>
+        </div>
+        <div class="info-foot"><span class="info-platform">picoctf.org</span><a href="https://picoctf.org" target="_blank" class="info-link">Info Lanjut <i class="fa-solid fa-arrow-right fa-xs"></i></a></div>
+      </div>
+
+      <div class="info-card open-reg fu" data-it="webinar">
+        <div class="info-card-stripe"></div>
+        <div class="info-top">
+          <div><div class="info-type">📡 Webinar</div><div class="info-title">Webinar: Memulai Karir di Cybersecurity 2024</div></div>
+          <span class="info-badge ib-open">Daftar Sekarang</span>
+        </div>
+        <div class="info-desc">Webinar gratis bersama praktisi cybersecurity Indonesia. Bahas tentang roadmap karir, sertifikasi yang relevan, dan tips masuk industri cybersecurity untuk fresh graduate dan mahasiswa.</div>
+        <div class="info-details">
+          <div class="info-row"><span class="ir-icon"><i class="fa-regular fa-calendar"></i></span> <span><strong>Tanggal:</strong> 20 April 2024, 19.00 WIB</span></div>
+          <div class="info-row"><span class="ir-icon"><i class="fa-solid fa-video"></i></span> <span><strong>Platform:</strong> Zoom (link dikirim via email)</span></div>
+          <div class="info-row"><span class="ir-icon"><i class="fa-solid fa-users"></i></span> <span><strong>Kapasitas:</strong> 200 peserta</span></div>
+          <div class="info-row"><span class="ir-icon"><i class="fa-solid fa-tag"></i></span> <span><strong>Biaya:</strong> Gratis</span></div>
+        </div>
+        <div class="info-foot"><span class="info-platform">cybersec.id</span><a href="#" target="_blank" class="info-link">Daftar <i class="fa-solid fa-arrow-right fa-xs"></i></a></div>
+      </div>
+
+      <div class="info-card upcoming fu" data-it="bootcamp">
+        <div class="info-card-stripe"></div>
+        <div class="info-top">
+          <div><div class="info-type">🎓 Bootcamp</div><div class="info-title">Bootcamp Ethical Hacking — Batch 5</div></div>
+          <span class="info-badge ib-upcoming">Segera Dibuka</span>
+        </div>
+        <div class="info-desc">Bootcamp intensif 3 bulan mencakup fundamentals networking, Linux, web hacking, penetration testing, dan persiapan sertifikasi CEH. Dipandu mentor berpengalaman dengan kurikulum berbasis industri.</div>
+        <div class="info-details">
+          <div class="info-row"><span class="ir-icon"><i class="fa-regular fa-calendar"></i></span> <span><strong>Mulai:</strong> 1 Mei 2024</span></div>
+          <div class="info-row"><span class="ir-icon"><i class="fa-solid fa-clock"></i></span> <span><strong>Durasi:</strong> 3 bulan (online)</span></div>
+          <div class="info-row"><span class="ir-icon"><i class="fa-solid fa-certificate"></i></span> <span><strong>Output:</strong> Sertifikat + Portfolio</span></div>
+          <div class="info-row"><span class="ir-icon"><i class="fa-solid fa-tag"></i></span> <span><strong>Biaya:</strong> Rp 1.500.000 (ada beasiswa)</span></div>
+        </div>
+        <div class="info-foot"><span class="info-platform">bootcamp-ethicalhack.id</span><a href="#" target="_blank" class="info-link">Info Lanjut <i class="fa-solid fa-arrow-right fa-xs"></i></a></div>
+      </div>
+
+      <div class="info-card closed fu" data-it="competition">
+        <div class="info-card-stripe"></div>
+        <div class="info-top">
+          <div><div class="info-type">🏆 Kompetisi CTF</div><div class="info-title">COMPFEST 16 CTF — UI</div></div>
+          <span class="info-badge ib-closed">Selesai</span>
+        </div>
+        <div class="info-desc">Kompetisi CTF tahunan dari Universitas Indonesia. Salah satu CTF bergengsi di Indonesia yang diikuti tim-tim dari seluruh kampus.</div>
+        <div class="info-details">
+          <div class="info-row"><span class="ir-icon"><i class="fa-regular fa-calendar"></i></span> <span><strong>Pelaksanaan:</strong> September 2023</span></div>
+          <div class="info-row"><span class="ir-icon"><i class="fa-solid fa-trophy"></i></span> <span><strong>Hadiah:</strong> Total Rp 15.000.000</span></div>
+          <div class="info-row"><span class="ir-icon"><i class="fa-solid fa-globe"></i></span> <span><strong>Format:</strong> Tim (3 orang)</span></div>
+        </div>
+        <div class="info-foot"><span class="info-platform">compfest.id</span><a href="https://compfest.id" target="_blank" class="info-link">Lihat Detail <i class="fa-solid fa-arrow-right fa-xs"></i></a></div>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+
+<footer>
+  <div class="fi">
+    <div class="flogo"><em>sec</em>folio</div>
+    <div class="fcopy">// made with ❤️ &amp; lots of coffee · 2024</div>
+    <div class="fsocs">
+      <a href="https://github.com/USERNAME" target="_blank" class="soc-link"><i class="fa-brands fa-github"></i></a>
+      <a href="https://linkedin.com/in/USERNAME" target="_blank" class="soc-link"><i class="fa-brands fa-linkedin-in"></i></a>
+    </div>
+  </div>
+</footer>
+
+<script>
+const nav=document.getElementById('nav');
+window.addEventListener('scroll',()=>nav.classList.toggle('scrolled',window.scrollY>20),{passive:true});
+const ham=document.getElementById('ham'),nl=document.getElementById('navlinks');
+if(ham)ham.addEventListener('click',()=>{ham.classList.toggle('open');nl.classList.toggle('open');});
+
+function updateCounts(){
+  document.getElementById('cnt-blog').textContent=document.querySelectorAll('#blog-list .blog-card').length;
+  document.getElementById('cnt-info').textContent=document.querySelectorAll('#info-list .info-card').length;
+}
+updateCounts();
+
+document.querySelectorAll('.sec-tab').forEach(tab=>{
+  tab.addEventListener('click',()=>{
+    document.querySelectorAll('.sec-tab').forEach(t=>t.classList.remove('active'));
+    document.querySelectorAll('.sec-panel').forEach(p=>p.classList.remove('active'));
+    tab.classList.add('active');
+    document.getElementById(`panel-${tab.dataset.s}`).classList.add('active');
+    runFilter();
+  });
+});
+
+document.addEventListener('click',e=>{
+  const preview=e.target.closest('.blog-preview');
+  if(!preview)return;
+  const card=preview.closest('.blog-card');
+  if(!card)return;
+  document.querySelectorAll('.blog-card.open').forEach(c=>{if(c!==card)c.classList.remove('open');});
+  card.classList.toggle('open');
+  if(card.classList.contains('open'))setTimeout(()=>card.scrollIntoView({behavior:'smooth',block:'nearest'}),50);
+});
+
+document.querySelectorAll('.ift').forEach(tab=>{
+  tab.addEventListener('click',()=>{
+    document.querySelectorAll('.ift').forEach(t=>t.classList.remove('active'));
+    tab.classList.add('active');
+    runFilter();
+  });
+});
+
+function runFilter(){
+  const sv=(document.getElementById('main-search')?.value||'').toLowerCase();
+  const cf=document.getElementById('cat-filter')?.value||'';
+  const sf=document.getElementById('sort-filter')?.value||'newest';
+  const activePanel=document.querySelector('.sec-panel.active');
+  if(!activePanel)return;
+  if(activePanel.id==='panel-blog'){
+    const cards=[...document.querySelectorAll('#blog-list .blog-card')];
+    cards.forEach(c=>{
+      const titleMatch=!sv||(c.dataset.title||'').toLowerCase().includes(sv);
+      const catMatch=!cf||c.dataset.cat===cf;
+      c.style.display=(titleMatch&&catMatch)?'':'none';
+    });
+    const visible=cards.filter(c=>c.style.display!=='none');
+    visible.sort((a,b)=>{const da=new Date(a.dataset.date),db=new Date(b.dataset.date);return sf==='newest'?db-da:da-db;});
+    const list=document.getElementById('blog-list');
+    visible.forEach(c=>list.appendChild(c));
+    checkEmpty(list,'blog-list');
+  }
+  if(activePanel.id==='panel-info'){
+    const ait=document.querySelector('.ift.active')?.dataset?.it||'';
+    const cards=[...document.querySelectorAll('#info-list .info-card')];
+    cards.forEach(c=>{
+      const titleEl=c.querySelector('.info-title');
+      const titleMatch=!sv||titleEl.textContent.toLowerCase().includes(sv);
+      const itMatch=!ait||c.dataset.it===ait;
+      c.style.display=(titleMatch&&itMatch)?'':'none';
+    });
+    checkEmpty(document.getElementById('info-list'),'info-list');
+  }
+}
+
+function checkEmpty(container,id){
+  const visible=[...container.querySelectorAll('.blog-card,.info-card')].filter(c=>c.style.display!=='none');
+  let es=container.querySelector('.empty-state');
+  if(visible.length===0){
+    if(!es){es=document.createElement('div');es.className='empty-state';es.innerHTML='<div class="ei">🔍</div><p>Tidak ada yang cocok dengan filter kamu.</p>';container.appendChild(es);}
+    es.style.display='';
+  }else if(es){es.style.display='none';}
+}
+
+['main-search','cat-filter','sort-filter'].forEach(id=>{
+  const el=document.getElementById(id);
+  if(el)el.addEventListener(el.tagName==='INPUT'?'input':'change',runFilter);
+});
+
+function copyLink(){
+  navigator.clipboard.writeText(window.location.href).then(()=>{
+    const btns=document.querySelectorAll('.share-btn');
+    btns.forEach(b=>{if(b.textContent.includes('Copy')){const orig=b.innerHTML;b.innerHTML='<i class="fa-solid fa-check fa-xs"></i> Disalin!';setTimeout(()=>b.innerHTML=orig,2000);}});
+  });
+}
+
+const obs=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('vis');});},{threshold:.08});
+document.querySelectorAll('.fu').forEach(el=>obs.observe(el));
+</script>
+</body>
+</html>
